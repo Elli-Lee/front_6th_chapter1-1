@@ -1,9 +1,16 @@
-export const ProductFilterAndSort = ({ pagination }) => {
-  const selectOptions = [
+export const ProductFilterAndSort = ({ pagination, sort }) => {
+  const limitOptions = [
     { value: "10", label: "10개", selected: pagination.limit === 10 },
     { value: "20", label: "20개", selected: pagination.limit === 20 },
     { value: "50", label: "50개", selected: pagination.limit === 50 },
     { value: "100", label: "100개", selected: pagination.limit === 100 },
+  ];
+
+  const sortOptions = [
+    { value: "price_asc", label: "가격 낮은순", selected: sort === "price_asc" },
+    { value: "price_desc", label: "가격 높은순", selected: sort === "price_desc" },
+    { value: "name_asc", label: "이름순", selected: sort === "name_asc" },
+    { value: "name_desc", label: "이름 역순", selected: sort === "name_desc" },
   ];
 
   return `
@@ -42,7 +49,7 @@ export const ProductFilterAndSort = ({ pagination }) => {
                 <label class="text-sm text-gray-600">개수:</label>
                 <select id="limit-select"
                         class="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
-                  ${selectOptions
+                  ${limitOptions
                     .map(
                       (option) =>
                         `<option value="${option.value}"${option.selected ? " selected" : ""}>
@@ -57,10 +64,14 @@ export const ProductFilterAndSort = ({ pagination }) => {
                 <label clasIs="text-sm text-gray-600">정렬:</label>
                 <select id="sort-select" class="text-sm border border-gray-300 rounded px-2 py-1
                              focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
-                  <option value="price_asc" selected="">가격 낮은순</option>
-                  <option value="price_desc">가격 높은순</option>
-                  <option value="name_asc">이름순</option>
-                  <option value="name_desc">이름 역순</option>
+                  ${sortOptions
+                    .map(
+                      (option) =>
+                        `<option value="${option.value}"${option.selected ? " selected" : ""}>
+                      ${option.label}
+                    </option>`,
+                    )
+                    .join("")}
                 </select>
               </div>
             </div>

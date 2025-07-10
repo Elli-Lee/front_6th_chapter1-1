@@ -17,10 +17,14 @@ function main() {
   let state = {
     products: [],
     isLoading: true,
+    isLoadingMore: false, // 추가 로딩 상태
+    hasMore: true, // 더 가져올 데이터가 있는지
     pagination: {
       limit: 20,
       page: 1,
+      total: 0,
     },
+    sort: "price_asc",
     filters: "",
   };
 
@@ -41,7 +45,6 @@ function main() {
           state.products = response.products;
           state.pagination = response.pagination;
           state.filters = response.filters;
-          console.log("again products", state.products);
         })
         .catch((error) => {
           console.log("Fetch Error", error);
@@ -54,51 +57,60 @@ function main() {
 
     if (target.id === "sort-select") {
       const newSortBy = target.value;
-      console.log("newSortBy", newSortBy);
+      state.sort = newSortBy;
+      state.isLoading = true;
+      console.log("again products", state.products);
+      render(state);
+
+      getProducts({ sort: state.sort, limit: state.pagination.limit })
+        .then((response) => {
+          state.products = response.products;
+          state.pagination = response.pagination;
+          state.filters = response.filters;
+        })
+        .catch((error) => {
+          console.log("Fetch Error", error);
+        })
+        .finally(() => {
+          state.isLoading = false;
+          render(state);
+        });
     }
   });
-  // document.addEventListener("change", (event) => {
-  //   const target = event.target;
 
-  //   // limit select 변경 감지
-  //   if (target.id === "limit-select") {
-  //     const newLimit = parseInt(target.value);
-  //     state.pagination.limit = newLimit;
-  //     state.isLoading = true;
-  //     render(state);
+  function loadMoreProducts() {
+    if (state.isLoadingMore || !state.hasMore) return;
 
-  //     // 새로운 limit으로 상품 다시 로드
-  //     getProducts({ limit: newLimit })
-  //       .then((response) => {
-  //         state.products = response.products;
-  //         state.pagination = response.pagination;
-  //         state.filters = response.filters;
-  //       })
-  //       .finally(() => {
-  //         state.isLoading = false;
-  //         render(state);
-  //       });
-  //   }
+    state.isLoadingMore = true;
+    state.pagination.page += 1;
+    render(state);
 
-  //   // sort select 변경 감지
-  //   if (target.id === "sort-select") {
-  //     const sortBy = target.value;
-  //     state.isLoading = true;
-  //     render(state);
+    getProducts({
+      page: state.pagination.page,
+      limit: state.pagination.limit,
+      sort: state.sort,
+    })
+      .then((response) => {
+        // 기존 products에 새로운 products 추가
+        state.products = [...state.products, ...response.products];
 
-  //     // 새로운 정렬로 상품 다시 로드
-  //     getProducts({ sort: sortBy, limit: state.pagination.limit })
-  //       .then((response) => {
-  //         state.products = response.products;
-  //         state.pagination = response.pagination;
-  //         state.filters = response.filters;
-  //       })
-  //       .finally(() => {
-  //         state.isLoading = false;
-  //         render(state);
-  //       });
-  //   }
-  // });
+        // 더 가져올 데이터가 있는지 확인 -> 전체 다 가지고 오면 더 가져올 데이터가 없음
+        state.hasMore = response.products.length === state.pagination.limit;
+      })
+      .finally(() => {
+        state.isLoadingMore = false;
+        render(state);
+      });
+  }
+  // 스크롤 이벤트 리스터
+  document.addEventListener("scroll", () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+    // 스크롤이 바닥에서 100px 정도 남았을 때 로드
+    if (scrollHeight - scrollTop - clientHeight <= 100) {
+      loadMoreProducts();
+    }
+  });
 
   // 초기 렌더링
   render(state);
