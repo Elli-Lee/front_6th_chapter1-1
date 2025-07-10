@@ -5,10 +5,10 @@ import { ProductList } from "../components/ProductList.js";
 import { Footer } from "../components/layout/Footer.js";
 import { Header } from "../components/layout/Header.js";
 
-export const MainPage = ({ isLoading, products, pagination, sort, hasMore, isLoadingMore }) => {
+export const MainPage = ({ isLoading, products, pagination, sort, hasMore, isLoadingMore, cart }) => {
   return `
     <div class="min-h-screen bg-gray-50">
-      ${Header()}
+      ${Header({ cart })}
       <main class="max-w-md mx-auto px-4 py-4">
         <!-- 검색 및 필터 -->
         ${ProductFilterAndSort({ pagination, sort })}

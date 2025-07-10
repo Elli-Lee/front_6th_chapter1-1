@@ -26,6 +26,7 @@ function main() {
     },
     sort: "price_asc",
     filters: "",
+    cart: [], // 장바구니 추가한 상품 Id
   };
 
   // 전역 이벤트 위임
@@ -75,6 +76,26 @@ function main() {
           state.isLoading = false;
           render(state);
         });
+    }
+  });
+
+  // 클릭 이벤트 위임 추가
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    // 장바구니 담기 버튼 클릭 처리
+    if (target.classList.contains("add-to-cart-btn")) {
+      const productId = target.getAttribute("data-product-id");
+
+      // 이미 장바구니에 있는 상품인지 확인
+      if (!state.cart.includes(productId)) {
+        state.cart.push(productId);
+        console.log("장바구니에 추가됨:", productId);
+        console.log("현재 장바구니:", state.cart);
+      } else {
+        console.log("이미 장바구니에 있는 상품입니다:", productId);
+      }
+      render(state);
     }
   });
 
