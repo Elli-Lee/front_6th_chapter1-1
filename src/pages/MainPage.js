@@ -5,13 +5,13 @@ import { ProductList } from "../components/ProductList.js";
 import { Footer } from "../components/layout/Footer.js";
 import { Header } from "../components/layout/Header.js";
 
-export const MainPage = ({ isLoading, products }) => {
+export const MainPage = ({ isLoading, products, pagination }) => {
   return `
     <div class="min-h-screen bg-gray-50">
       ${Header()}
       <main class="max-w-md mx-auto px-4 py-4">
         <!-- 검색 및 필터 -->
-        ${ProductFilterAndSort()}
+        ${ProductFilterAndSort({ pagination })}
         <!-- 상품 목록 -->
         <div class="mb-6">
           <div>
@@ -20,7 +20,7 @@ export const MainPage = ({ isLoading, products }) => {
               !isLoading
                 ? `
             <div class="mb-4 text-sm text-gray-600">
-              총 <span class="font-medium text-gray-900">340개</span>의 상품
+              총 <span class="font-medium text-gray-900">${pagination.total || 0}개</span>의 상품
             </div>
             `
                 : ""
@@ -35,9 +35,14 @@ export const MainPage = ({ isLoading, products }) => {
                 : `${ProductList({ products })}`
             }
             </div>
-            
 
-            ${ProductSpinner()}
+            ${
+              isLoading
+                ? ProductSpinner()
+                : `
+              끝!
+            `
+            }
         </div>
       </main>
       ${Footer()}

@@ -1,4 +1,11 @@
-export const ProductFilterAndSort = () => {
+export const ProductFilterAndSort = ({ pagination }) => {
+  const selectOptions = [
+    { value: "10", label: "10개", selected: pagination.limit === 10 },
+    { value: "20", label: "20개", selected: pagination.limit === 20 },
+    { value: "50", label: "50개", selected: pagination.limit === 50 },
+    { value: "100", label: "100개", selected: pagination.limit === 100 },
+  ];
+
   return `
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
           <!-- 검색창 -->
@@ -35,23 +42,19 @@ export const ProductFilterAndSort = () => {
                 <label class="text-sm text-gray-600">개수:</label>
                 <select id="limit-select"
                         class="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
-                  <option value="10">
-                    10개
-                  </option>
-                  <option value="20" selected="">
-                    20개
-                  </option>
-                  <option value="50">
-                    50개
-                  </option>
-                  <option value="100">
-                    100개
-                  </option>
+                  ${selectOptions
+                    .map(
+                      (option) =>
+                        `<option value="${option.value}"${option.selected ? " selected" : ""}>
+                      ${option.label}
+                    </option>`,
+                    )
+                    .join("")}
                 </select>
               </div>
               <!-- 정렬 -->
               <div class="flex items-center gap-2">
-                <label class="text-sm text-gray-600">정렬:</label>
+                <label clasIs="text-sm text-gray-600">정렬:</label>
                 <select id="sort-select" class="text-sm border border-gray-300 rounded px-2 py-1
                              focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
                   <option value="price_asc" selected="">가격 낮은순</option>

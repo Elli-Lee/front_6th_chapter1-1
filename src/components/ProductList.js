@@ -1,7 +1,7 @@
 import { ProductItem } from "./ProductItem.js";
 
 export const ProductList = ({ products }) => {
-  console.log("products", products);
+  // console.log("products in ProductList", products);
   /*
   {
     "title": "PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포Ò장",
