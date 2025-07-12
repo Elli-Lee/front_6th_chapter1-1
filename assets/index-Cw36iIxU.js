@@ -316,23 +316,35 @@
       </div>
     </div>
   `}function M(){return`
-    <div class="text-center py-12">
-      <div class="mb-8">
-        <h1 class="text-6xl font-bold text-gray-300 mb-4">404</h1>
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">페이지를 찾을 수 없습니다</h2>
-        <p class="text-gray-600 mb-2">요청하신 페이지가 존재하지 않습니다.</p>
-        <p class="text-sm text-gray-500">경로: ${window.location.pathname}</p>
-      </div>
+    <div class="text-center my-4 py-20 shadow-md p-6 bg-white rounded-lg">
+      <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="404 페이지를 찾을 수 없습니다">
+        <defs>
+          <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4285f4;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1a73e8;stop-opacity:1" />
+          </linearGradient>
+          <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#000000" flood-opacity="0.1"/>
+          </filter>
+        </defs>
+        
+        <!-- 404 Numbers -->
+        <text x="160" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="48" font-weight="600" fill="url(#blueGradient)" text-anchor="middle">404</text>
+        
+        <!-- Icon decoration -->
+        <circle cx="80" cy="60" r="3" fill="#e8f0fe" opacity="0.8"/>
+        <circle cx="240" cy="60" r="3" fill="#e8f0fe" opacity="0.8"/>
+        <circle cx="90" cy="45" r="2" fill="#4285f4" opacity="0.5"/>
+        <circle cx="230" cy="45" r="2" fill="#4285f4" opacity="0.5"/>
+        
+        <!-- Message -->
+        <text x="160" y="110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="400" fill="#5f6368" text-anchor="middle">페이지를 찾을 수 없습니다</text>
+        
+        <!-- Subtle bottom accent -->
+        <rect x="130" y="130" width="60" height="2" rx="1" fill="url(#blueGradient)" opacity="0.3"/>
+      </svg>
       
-      <div class="space-y-3">
-        <a href="/" data-link class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-          홈으로 돌아가기
-        </a>
-        <br>
-        <button onclick="window.history.back()" class="text-blue-600 hover:text-blue-800 hover:underline">
-          이전 페이지로 돌아가기
-        </button>
-      </div>
+      <a href="/" data-link class="inline-block px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">홈으로</a>
     </div>
   `}function N(e){return e.map(e=>{let t=e.lprice?parseInt(e.lprice):0;return`
       <div class="related-product-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer" 
@@ -373,4 +385,4 @@
         </button>
       </div>
     </div>
-  `}function ie(){document.addEventListener(`click`,R),document.addEventListener(`input`,z),document.addEventListener(`change`,B),document.addEventListener(`keydown`,V),window.addEventListener(`scroll`,se),window.addEventListener(`beforeunload`,()=>{})}function R(e){let t=e.target;if(t.closest(`.add-to-cart-btn`)){U(e);return}if(t.closest(`.product-card`)&&!t.closest(`.add-to-cart-btn`)){H(e);return}if(t.closest(`.related-product-card`)){K(e);return}if(t.closest(`#quantity-increase`)){W(e);return}if(t.closest(`#quantity-decrease`)){G(e);return}if(t.closest(`[data-link]`)){q(e);return}}function z(e){let t=e.target;if(t.matches(`#search-input`)){J(e);return}}function B(e){let t=e.target;if(t.matches(`#sort-select`)){ae(e);return}if(t.matches(`#limit-select`)){oe(e);return}}function V(e){let t=e.target;if(t.matches(`#search-input`)&&e.key===`Enter`){Y(e);return}}function H(e){let t=e.target.closest(`.product-card`);if(!t)return;let n=t.dataset.productId;window.router&&window.router.navigate(`/product/${n}`)}function U(e){e.preventDefault(),e.stopPropagation(),e.stopImmediatePropagation();let t=e.target.closest(`.product-card`);if(!t)return;let n=ce(t);n&&h.addToCart(n)}function W(e){e.preventDefault();let t=document.getElementById(`quantity-input`);if(!t)return;let n=parseInt(t.value)||1;t.value=n+1}function G(e){e.preventDefault();let t=document.getElementById(`quantity-input`);if(!t)return;let n=parseInt(t.value)||1,r=Math.max(1,n-1);t.value=r}function K(e){let t=e.target.closest(`.related-product-card`);if(!t)return;let n=t.dataset.productId;window.router&&window.router.navigate(`/product/${n}`)}function q(e){e.preventDefault();let t=e.target.closest(`[data-link]`);if(!t)return;let n=t.getAttribute(`href`);n&&window.router&&window.router.navigate(n)}function J(e){let t=e.target.value.trim();clearTimeout(J.timer),J.timer=setTimeout(()=>{X(t)},300)}function Y(e){e.preventDefault();let t=e.target.value.trim();clearTimeout(J.timer),X(t)}function X(e){let t=d.getState().filters;f.updateFilters({...t,search:e}),Z({...t,search:e}),b()}function Z(e){let t=new URL(window.location),n=new URLSearchParams;e.search&&e.search!==``&&n.set(`search`,e.search),e.sort&&e.sort!==`price_asc`&&n.set(`sort`,e.sort),e.limit&&e.limit!==20&&n.set(`limit`,e.limit);let r=`${t.pathname}${n.toString()?`?${n.toString()}`:``}`;window.history.replaceState(null,``,r)}function ae(e){let t=e.target.value,n=d.getState().filters;f.updateFilters({...n,sort:t}),Z({...n,sort:t}),b()}function oe(e){let t=parseInt(e.target.value),n=d.getState().filters;f.updateFilters({...n,limit:t}),Z({...n,limit:t}),b()}function se(){let{scrollTop:e,scrollHeight:t,clientHeight:n}=document.documentElement;if(e+n>=t-100){let e=d.getState();!e.isLoading&&!e.error&&e.products.length<e.total&&(window.isInfiniteScrolling=!0,x().finally(()=>{window.isInfiniteScrolling=!1}))}}function ce(e){try{let t=e.querySelector(`h3`),n=e.querySelector(`.text-lg.font-bold`),r=e.querySelector(`img`);return!t||!n||!r?(console.warn(`상품 정보 요소를 찾을 수 없습니다.`),null):{id:e.dataset.productId,title:t.textContent.trim(),lprice:n.textContent.replace(/[^0-9]/g,``),image:r.src}}catch(e){return console.error(`상품 정보 추출 중 오류 발생:`,e),null}}const le=()=>r(async()=>{let{worker:e,workerOptions:t}=await import(`./browser-C7Spd9bO.js`);return{worker:e,workerOptions:t}},[]).then(({worker:e,workerOptions:t})=>e.start(t));let Q;function $(){let e=document.getElementById(`root`);e&&(F(),Q=s({routes:[{path:`/`,component:`Home`},{path:`/product/:id`,component:`ProductDetail`},{path:`*`,component:`NotFound`}],onNavigate:(e,t)=>{let n={};for(let[e,r]of t)n[e]=r;switch(e.component){case`Home`:Object.keys(n).length>0&&f.loadFromURL(n),E(`home`,n);break;case`ProductDetail`:E(`product-detail`,e.params);break;case`NotFound`:default:E(`404`);break}}}),window.router=Q,window.productStore=d,Q.init(),window.isInfiniteScrolling=!1,ie())}le().then($);
+  `}function ie(){document.addEventListener(`click`,R),document.addEventListener(`input`,z),document.addEventListener(`change`,B),document.addEventListener(`keydown`,V),window.addEventListener(`scroll`,se),window.addEventListener(`beforeunload`,()=>{})}function R(e){let t=e.target;if(t.closest(`.add-to-cart-btn`)){U(e);return}if(t.closest(`.product-card`)&&!t.closest(`.add-to-cart-btn`)){H(e);return}if(t.closest(`.related-product-card`)){K(e);return}if(t.closest(`#quantity-increase`)){W(e);return}if(t.closest(`#quantity-decrease`)){G(e);return}if(t.closest(`[data-link]`)){q(e);return}}function z(e){let t=e.target;if(t.matches(`#search-input`)){J(e);return}}function B(e){let t=e.target;if(t.matches(`#sort-select`)){ae(e);return}if(t.matches(`#limit-select`)){oe(e);return}}function V(e){let t=e.target;if(t.matches(`#search-input`)&&e.key===`Enter`){Y(e);return}}function H(e){let t=e.target.closest(`.product-card`);if(!t)return;let n=t.dataset.productId;window.router&&window.router.navigate(`/product/${n}`)}function U(e){e.preventDefault(),e.stopPropagation(),e.stopImmediatePropagation();let t=e.target.closest(`.product-card`);if(!t)return;let n=ce(t);n&&h.addToCart(n)}function W(e){e.preventDefault();let t=document.getElementById(`quantity-input`);if(!t)return;let n=parseInt(t.value)||1;t.value=n+1}function G(e){e.preventDefault();let t=document.getElementById(`quantity-input`);if(!t)return;let n=parseInt(t.value)||1,r=Math.max(1,n-1);t.value=r}function K(e){let t=e.target.closest(`.related-product-card`);if(!t)return;let n=t.dataset.productId;window.router&&window.router.navigate(`/product/${n}`)}function q(e){e.preventDefault();let t=e.target.closest(`[data-link]`);if(!t)return;let n=t.getAttribute(`href`);n&&window.router&&window.router.navigate(n)}function J(e){let t=e.target.value.trim();clearTimeout(J.timer),J.timer=setTimeout(()=>{X(t)},300)}function Y(e){e.preventDefault();let t=e.target.value.trim();clearTimeout(J.timer),X(t)}function X(e){let t=d.getState().filters;f.updateFilters({...t,search:e}),Z({...t,search:e}),b()}function Z(e){let t=new URL(window.location),n=new URLSearchParams;e.search&&e.search!==``&&n.set(`search`,e.search),e.sort&&e.sort!==`price_asc`&&n.set(`sort`,e.sort),n.set(`limit`,e.limit||20);let r=`${t.pathname}${n.toString()?`?${n.toString()}`:``}`;window.history.replaceState(null,``,r)}function ae(e){let t=e.target.value,n=d.getState().filters;f.updateFilters({...n,sort:t}),Z({...n,sort:t}),b()}function oe(e){let t=parseInt(e.target.value),n=d.getState().filters;f.updateFilters({...n,limit:t}),Z({...n,limit:t}),b()}function se(){let{scrollTop:e,scrollHeight:t,clientHeight:n}=document.documentElement;if(e+n>=t-100){let e=d.getState();!e.isLoading&&!e.error&&e.products.length<e.total&&(window.isInfiniteScrolling=!0,x().finally(()=>{window.isInfiniteScrolling=!1}))}}function ce(e){try{let t=e.querySelector(`h3`),n=e.querySelector(`.text-lg.font-bold`),r=e.querySelector(`img`);return!t||!n||!r?(console.warn(`상품 정보 요소를 찾을 수 없습니다.`),null):{id:e.dataset.productId,title:t.textContent.trim(),lprice:n.textContent.replace(/[^0-9]/g,``),image:r.src}}catch(e){return console.error(`상품 정보 추출 중 오류 발생:`,e),null}}const le=()=>r(async()=>{let{worker:e,workerOptions:t}=await import(`./browser-CE3xRQNo.js`);return{worker:e,workerOptions:t}},[]).then(({worker:e,workerOptions:t})=>e.start(t));let Q;function $(){let e=document.getElementById(`root`);e&&(F(),Q=s({routes:[{path:`/`,component:`Home`},{path:`/product/:id`,component:`ProductDetail`},{path:`*`,component:`NotFound`}],onNavigate:(e,t)=>{let n={};for(let[e,r]of t)n[e]=r;switch(e.component){case`Home`:Object.keys(n).length>0&&f.loadFromURL(n),E(`home`,n);break;case`ProductDetail`:E(`product-detail`,e.params);break;case`NotFound`:default:E(`404`);break}}}),window.router=Q,window.productStore=d,Q.init(),window.isInfiniteScrolling=!1,ie())}le().then($);
